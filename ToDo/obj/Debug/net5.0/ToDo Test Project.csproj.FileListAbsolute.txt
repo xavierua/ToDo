@@ -1,0 +1,16 @@
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\bin\Debug\net5.0\ToDo Test Project.exe
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\bin\Debug\net5.0\ToDo Test Project.deps.json
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\bin\Debug\net5.0\ToDo Test Project.runtimeconfig.json
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\bin\Debug\net5.0\ToDo Test Project.runtimeconfig.dev.json
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\bin\Debug\net5.0\ToDo Test Project.dll
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\bin\Debug\net5.0\ref\ToDo Test Project.dll
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\bin\Debug\net5.0\ToDo Test Project.pdb
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ToDo Test Project.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ToDo Test Project.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ToDo Test Project.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ToDo Test Project.AssemblyInfo.cs
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ToDo Test Project.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ToDo Test Project.dll
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ref\ToDo Test Project.dll
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ToDo Test Project.pdb
+C:\Users\User\source\repos\ToDo Test Project\ToDo Test Project\obj\Debug\net5.0\ToDo Test Project.genruntimeconfig.cache
