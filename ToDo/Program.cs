@@ -16,9 +16,12 @@ namespace ToDo
         {
             _menu.AddNewItem("add new task", "a", ExecuteAddNewTask);
             _menu.AddNewItem("add description", "e", ExecuteAddDescription);
-            _menu.AddNewItem("remove task", "x", );
-            _menu.AddNewItem("mark task  as done", "d", );
-            Console.WriteLine(_menu.GetItems());
+            _menu.AddNewItem("remove task", "x", ExecuteDeleteTask);
+            _menu.AddNewItem("mark task as done", "d", () => ExecuteStatusTask("done"));
+            _menu.AddNewItem("mark task as undone", "u", () => ExecuteStatusTask("undone"));
+            _menu.AddNewItem("move up", "w", () => ExecuteChangePosition(_positionInTask, "up"));
+            _menu.AddNewItem("move down", "s", () => ExecuteChangePosition(_positionInTask, "down"));
+
             while (true)
             {
                 Console.WriteLine(NavigationMenu());
@@ -29,29 +32,18 @@ namespace ToDo
                 _numberOfTask = GetNumberOfTask();
 
                 var userChoice = Console.ReadKey();
-
+                string key = userChoice.Key.ToString().ToLower();
+                Console.WriteLine(key);
                 switch (userChoice.Key)
                 {
                     case ConsoleKey.A:
-                        ExecuteAddNewTask();
-                        break;
                     case ConsoleKey.E:
-                        ExecuteAddDescription();
-                        break;
                     case ConsoleKey.D:
-                        ExecuteStatusTask("done");
-                        break;
                     case ConsoleKey.U:
-                        ExecuteStatusTask("undone");
-                        break;
                     case ConsoleKey.X:
-                        ExecuteDeleteTask();
-                        break;
                     case ConsoleKey.W:
-                        ExecuteChangePosition(_positionInTask, "up");
-                        break;
                     case ConsoleKey.S:
-                        ExecuteChangePosition(_positionInTask, "down");
+                        _menu.ExecuteItem(key);
                         break;
                     case ConsoleKey.Escape:
                         return;
@@ -131,11 +123,10 @@ namespace ToDo
 
         public static string NavigationMenu()
         {
-            var menuInfo = new StringBuilder();
-
-            
+            var menuInfo = _menu.GetItems();
 
             Console.ForegroundColor = ConsoleColor.Green;
+
             return menuInfo.ToString();
         }
 

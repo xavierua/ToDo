@@ -22,16 +22,32 @@ namespace ToDo
             _items[button] = newItem;
         }
 
+        public void ExecuteItem(string key)
+        {
+            _items[key].Action();
+        }
+
         public string GetItems()
         {
             var listOfItems = new StringBuilder();
+            listOfItems
+                .Append($"\t{Title}")
+                .AppendLine();
             foreach (MenuItem item in _items.Values)
             {
                 listOfItems
-                    .Append($"To {item.Title} press \'{item.Button}\'")
-                    .AppendLine();
+                    .AppendLine()
+                    .Append($"Press \'{item.Button}\' - to {item.Title}");
             }
+            listOfItems
+                .AppendLine()
+                .Append('=', 40);
             return listOfItems.ToString();
+        }
+
+        public bool CheckIsKeyValid(string key)
+        {
+            return _items.ContainsKey(key) ? true : false;
         }
 
 
