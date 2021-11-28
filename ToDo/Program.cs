@@ -8,23 +8,28 @@ namespace ToDo
     internal class Program
     {
         private static int _position = 0;
-        private static TaskList _taskList = new();
-        private static Menu _menu = new("Main Menu");
+
         public static void Main(string[] args)
         {
-            _menu.AddNewItem("add new task", "a", ExecuteAddNewTask);
-            _menu.AddNewItem("add description", "e", ExecuteChangeDescription);
-            _menu.AddNewItem("remove task", "x", ExecuteDeleteTask);
-            _menu.AddNewItem("mark task as done", "d", () => ExecuteStatusTask(_position, "done"));
-            _menu.AddNewItem("mark task as undone", "u", () => ExecuteStatusTask(_position, "undone"));
-            _menu.AddNewItem("move up", "w", () => ExecuteChangePosition(_position, "up"));
-            _menu.AddNewItem("move down", "s", () => ExecuteChangePosition(_position, "down"));
+            var taskList = new TaskList();
+            var menu = new Menu("Main Menu");
+
+            menu.AddNewItem("add new task", "a", () => ExecuteAddNewTask(taskList));
+            menu.AddNewItem("add description", "e", () => ExecuteChangeDescription(taskList, _position));
+            menu.AddNewItem("remove task", "x", () => ExecuteDeleteTask(taskList, _position));
+            menu.AddNewItem("mark task as done", "d", () => ExecuteStatusTask(taskList, _position, "done"));
+            menu.AddNewItem("mark task as undone", "u", () => ExecuteStatusTask(taskList, _position, "undone"));
+            menu.AddNewItem("move up", "w", () => ExecuteChangePosition(taskList, _position, "up"));
+            menu.AddNewItem("move down", "s", () => ExecuteChangePosition(taskList, _position, "down"));
+
             while (true)
             {
-                PrintMenu(_menu);
-                PrintTaskList(_taskList);
+                PrintMenu(menu);
+                PrintTaskList(taskList);
+
                 var userChoice = Console.ReadKey();
                 string userKey = userChoice.Key.ToString().ToLower();
+
                 switch (userChoice.Key)
                 {
                     case ConsoleKey.A:
@@ -34,7 +39,7 @@ namespace ToDo
                     case ConsoleKey.X:
                     case ConsoleKey.W:
                     case ConsoleKey.S:
-                        _menu.ExecuteItem(userKey);
+                        menu.ExecuteItem(userKey);
                         break;
                     case ConsoleKey.Escape:
                         return;
@@ -45,7 +50,8 @@ namespace ToDo
                 Console.Clear();
             }
         }
-        public static void ExecuteAddNewTask()
+
+        public static void ExecuteAddNewTask(TaskList taskList)
         {
             Console.Write("\nEnter name of task: ");
             string taskTitle = Console.ReadLine();
@@ -56,20 +62,22 @@ namespace ToDo
                 taskTitle = Console.ReadLine();
             }
             Task newTask = new(taskTitle);
-            _taskList.AddToList(newTask);
+            taskList.AddToList(newTask);
         }
-        public static void ExecuteChangeDescription()
+
+        public static void ExecuteChangeDescription(TaskList taskList, int index)
         {
-            Task task = _taskList.GetTaskByIndex(_position);
+            Task task = taskList.GetTaskByIndex(index);
             Console.Write($"\nEnter desription for {task.Title}: ");
             string userInput = Console.ReadLine();
             task.ChangeDescription(userInput);
         }
-        public static void ExecuteStatusTask(int index, string status)
+
+        public static void ExecuteStatusTask(TaskList taskList, int index, string status)
         {
-            if(_taskList.IsIndexValid(_position))
+            if(taskList.IsIndexValid(_position))
             {
-                var task = _taskList.GetTaskByIndex(index);
+                var task = taskList.GetTaskByIndex(index);
                 if (status == "done")
                 {
                     task.MarkAsDone();
@@ -84,18 +92,19 @@ namespace ToDo
                 Console.WriteLine("The task list is empty!");
             }
         }
-        public static void ExecuteDeleteTask()
+
+        public static void ExecuteDeleteTask(TaskList taskList, int index)
         {
-            if(!_taskList.IsEmpty())
+            if(!taskList.IsEmpty())
             {
-                if (_position > 0)
+                if (index > 0)
                 {
-                    _taskList.DeleteTask(_position);
+                    taskList.DeleteTask(index);
                     _position -= 1;
                 }
                 else
                 {
-                    _taskList.DeleteTask(_position);
+                    taskList.DeleteTask(index);
                 }
             }
             else
@@ -103,31 +112,32 @@ namespace ToDo
                 Console.WriteLine("The task list is empty!");
             }
         }
-        public static void ExecuteChangePosition(int index, string direction)
+
+        public static void ExecuteChangePosition(TaskList taskList, int index, string direction)
         {
             if (direction == "up")
             {
-                if (IsPositionValid(index, direction))
+                if (IsPositionValid(taskList.Count, index, direction))
                 {
                     _position -= 1;
                 }
             }
             else
             {
-                if (IsPositionValid(index, direction))
+                if (IsPositionValid(taskList.Count, index, direction))
                 {
                     _position += 1;
                 }
             }
-
         }
+
         public static void PrintMenu(Menu menu)
         {
             var items = menu.GetItems();
             Console.ForegroundColor = ConsoleColor.Green;
             var menuInfo = new StringBuilder();
             menuInfo
-                .Append($"\t{_menu.Title}")
+                .Append($"\t{menu.Title}")
                 .AppendLine();
             foreach (MenuItem item in items)
             {
@@ -140,51 +150,42 @@ namespace ToDo
                 .Append('=', 40);
             Console.WriteLine(menuInfo.ToString());
         }
+
         public static void PrintTaskList(TaskList taskList)
         {
-            var tasks = taskList.ListOfTask();
-            for (int i = 0; i < tasks.Count; i++)
+            for (int i = 0; i < taskList.Count; i++)
             {
-                if (_position == i)
-                {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                }
+                var task = taskList.GetTaskByIndex(i);
+
+                Console.ForegroundColor = _position == i ? ConsoleColor.Blue : ConsoleColor.Yellow;
+
                 var builder = new StringBuilder();
                 builder
                     .Append($"{i + 1}")
-                    .AppendLine($"\tName: {tasks[i].Title}")
-                    .AppendLine($"\tDescription: {tasks[i].Description}")
-                    .AppendLine($"\tCreated At: {tasks[i].CreatedAt}")
-                    .AppendLine($"\tCompleted At: {(tasks[i].IsDone ? tasks[i].CompletedAt : "Not complite")}");
+                    .AppendLine($"\tName: {task.Title}")
+                    .AppendLine($"\tDescription: {task.Description}")
+                    .AppendLine($"\tCreated At: {task.CreatedAt}")
+                    .AppendLine($"\tCompleted At: {(task.IsDone ? task.CompletedAt : "Not complete")}");
                 Console.WriteLine(builder.ToString());
-                if (!_taskList.IsEmpty())
+                if (!taskList.IsEmpty())
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine(new string('-', 40));
                 }
             }
         }
+
         public static bool IsValid(string userInput)
         {
 
             return userInput != string.Empty || userInput != null;
         }
-        public static bool IsPositionValid(int position, string wayToMove)
+
+        public static bool IsPositionValid(int taskCount, int position, string wayToMove)
         {
             bool moveUP = 0 < position;
-            bool moveDown = position < _taskList.Count - 1;
-            if (wayToMove == "up")
-            {
-                return moveUP;
-            }
-            else
-            {
-                return moveDown;
-            }
+            bool moveDown = position < taskCount - 1;
+            return wayToMove == "up" ? moveUP : moveDown;
         }
     }
 }
