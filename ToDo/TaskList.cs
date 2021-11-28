@@ -8,10 +8,13 @@ namespace ToDo
 
         public int Count { get { return _tasks.Count; } }
 
+        public IReadOnlyCollection<Task> Tasks { get { return _tasks; } }
+
         public void AddToList(Task task)
         {
             _tasks.Add(task);
         }
+
         public bool DeleteTask(int taskId)
         {
             var indexIsInvalid = _tasks.Count == 0
@@ -21,14 +24,12 @@ namespace ToDo
                 ? false
                 : _tasks.Remove(_tasks[taskId]);
         }
-        public List<Task> ListOfTask()
-        {
-            return _tasks;
-        }
+
         public Task GetTaskByIndex(int index)
         {
             return _tasks[index];
         }
+
         public bool IsIndexValid(int index)
         {
             if(!IsEmpty())
@@ -40,6 +41,7 @@ namespace ToDo
             }
             return false;
         }
+
         public bool IsEmpty()
         {
             return _tasks.Count == 0;

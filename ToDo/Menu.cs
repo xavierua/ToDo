@@ -7,6 +7,7 @@ namespace ToDo
     public class Menu
     {
         private Dictionary<string, MenuItem> _items = new();
+
         public Menu(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -24,6 +25,7 @@ namespace ToDo
             var newItem = new MenuItem(title, button, action);
             _items[button] = newItem;
         }
+
         public void ExecuteItem(string key)
         {
             if(CheckIsKeyValid(key))
@@ -32,6 +34,7 @@ namespace ToDo
             }
             
         }
+
         public List<MenuItem> GetItems()
         {
             List<MenuItem> itemsList = new();
@@ -41,7 +44,8 @@ namespace ToDo
             }
             return itemsList;
         }
-        public bool CheckIsKeyValid(string key)
+
+        private bool CheckIsKeyValid(string key)
         {
             return _items.ContainsKey(key);
         }

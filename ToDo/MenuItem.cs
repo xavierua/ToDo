@@ -22,7 +22,9 @@ namespace ToDo
         }
 
         public string Title { get; }
+
         public string Button { get; }
+
         public Action Action { get; }
     }
 }
