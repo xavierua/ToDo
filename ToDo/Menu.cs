@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +10,11 @@ namespace ToDo
 
         public Menu(string title)
         {
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                throw new ArgumentException($"'{nameof(title)}' cannot be null or whitespace.", nameof(title));
+            }
+
             Title = title;
         }
 
@@ -22,91 +26,28 @@ namespace ToDo
             _items[button] = newItem;
         }
 
-        public string GetItems()
+        public void ExecuteItem(string key)
         {
-            var listOfItems = new StringBuilder();
-            foreach (MenuItem item in _items.Values)
+            if(CheckIsKeyValid(key))
             {
-                listOfItems
-                    .Append($"To {item.Title} press \'{item.Button}\'")
-                    .AppendLine();
+                _items[key].Action();
             }
-            return listOfItems.ToString();
+            
         }
 
+        public List<MenuItem> GetItems()
+        {
+            List<MenuItem> itemsList = new();
+            foreach (MenuItem item in _items.Values)
+            {
+                itemsList.Add(item);
+            }
+            return itemsList;
+        }
 
-        //private List<MenuItem> _itemsMenu = new();
-
-        //public void AddMenuItem(string title, string button, Action action)
-        //{
-        //    MenuItem newMenuItem = new(title, button, action);
-        //    _itemsMenu.Add(newMenuItem);
-        //}
-
-        //public bool IsButtonValid(string button)
-        //{
-        //    foreach (MenuItem item in _itemsMenu)
-        //    {
-        //        if (item.Button == button)
-        //        {
-        //            return false;
-        //        }
-        //    }
-        //    return true;
-        //}
-
-        //public bool CheckButton(string button)
-        //{
-        //    foreach (MenuItem item in _itemsMenu)
-        //    {
-        //        if (item.Button == button)
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
-        //public int FindIndexOfItem (string button)
-        //{
-        //    int itemIndex = -1;
-
-        //    if (CheckButton(button))
-        //    {
-        //        for (int index = 0; index < _itemsMenu.Count; index++)
-        //        {
-        //            if(_itemsMenu[index].Button == button)
-        //            {
-        //                itemIndex = index;
-        //                break;
-        //            }
-        //        }
-        //    }
-
-        //    return itemIndex;
-        //}
-
-        //public void ChangeButton(string button)
-        //{
-        //    int index = FindIndexOfItem(button);
-        //}
-
-        //public void DeleteItemMenu()
-        //{   
-        //}
-
-        //public string ShowMenuItem()
-        //{
-        //    var menuInfo = new StringBuilder();
-
-        //    foreach (MenuItem item in _itemsMenu)
-        //    {
-        //        menuInfo.Append($"Press \"{item.Button}\" to execute \"{item.Title}\"").AppendLine();
-        //    }
-
-        //    return menuInfo.ToString();
-        //}
-
-
+        private bool CheckIsKeyValid(string key)
+        {
+            return _items.ContainsKey(key);
+        }
     }
 }

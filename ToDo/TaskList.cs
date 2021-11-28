@@ -6,6 +6,10 @@ namespace ToDo
     {
         private List<Task> _tasks = new();
 
+        public int Count { get { return _tasks.Count; } }
+
+        public IReadOnlyCollection<Task> Tasks { get { return _tasks; } }
+
         public void AddToList(Task task)
         {
             _tasks.Add(task);
@@ -21,9 +25,21 @@ namespace ToDo
                 : _tasks.Remove(_tasks[taskId]);
         }
 
-        public List<Task> GetTaskList()
+        public Task GetTaskByIndex(int index)
         {
-            return _tasks;
+            return _tasks[index];
+        }
+
+        public bool IsIndexValid(int index)
+        {
+            if(!IsEmpty())
+            {
+                if (0 <= index && index < _tasks.Count)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool IsEmpty()
